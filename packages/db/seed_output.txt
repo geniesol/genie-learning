@@ -1,0 +1,45 @@
+🔍 Loading env from: D:\Genie Learning\platform\.env
+[dotenv@17.3.1] injecting env (8) from ..\..\.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+🔗 DATABASE_URL: Loaded
+🌱 Clearing existing data...
+🔍 Fetching table names...
+⚠️ Raw query/truncate failed: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+🔄 Falling back to manual deletion sequence...
+❌ Fallback deletion also failed: 
+Invalid `prisma.coursePricing.deleteMany()` invocation in
+D:\Genie Learning\platform\packages\db\prisma\seed.ts:41:34
+
+  38 console.log('🔄 Falling back to manual deletion sequence...');
+  39 // Manual fallback
+  40 try {
+→ 41   await prisma.coursePricing.deleteMany(
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+🌱 Seeding database...
+PrismaClientInitializationError: 
+Invalid `prisma.course.upsert()` invocation in
+D:\Genie Learning\platform\packages\db\prisma\seed.ts:53:39
+
+  50 console.log('🌱 Seeding database...');
+  51 
+  52 // 1. Create Courses
+→ 53 const course1 = await prisma.course.upsert(
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at ei.handleRequestError (D:\Genie Learning\platform\node_modules\.pnpm\@prisma+client@6.19.2_prisma@6.19.2_typescript@5.9.2__typescript@5.9.2\node_modules\@prisma\client\src\runtime\RequestHandler.ts:242:13)
+    at ei.handleAndLogRequestError (D:\Genie Learning\platform\node_modules\.pnpm\@prisma+client@6.19.2_prisma@6.19.2_typescript@5.9.2__typescript@5.9.2\node_modules\@prisma\client\src\runtime\RequestHandler.ts:174:12)
+    at ei.request (D:\Genie Learning\platform\node_modules\.pnpm\@prisma+client@6.19.2_prisma@6.19.2_typescript@5.9.2__typescript@5.9.2\node_modules\@prisma\client\src\runtime\RequestHandler.ts:143:12)
+    at async a (D:\Genie Learning\platform\node_modules\.pnpm\@prisma+client@6.19.2_prisma@6.19.2_typescript@5.9.2__typescript@5.9.2\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:833:24)
+    at async main (D:\Genie Learning\platform\packages\db\prisma\seed.ts:53:19) {
+  clientVersion: '6.19.2',
+  errorCode: undefined,
+  retryable: undefined
+}

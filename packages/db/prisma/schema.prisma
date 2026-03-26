@@ -1,0 +1,306 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  student
+  instructor
+  admin
+  super_admin
+}
+
+enum CourseStatus {
+  draft
+  published
+  archived
+}
+
+enum LessonType {
+  video
+  text
+  quiz
+  assignment
+}
+
+enum EnrollmentStatus {
+  active
+  completed
+  suspended
+}
+
+enum PaymentStatus {
+  pending
+  success
+  failed
+  refunded
+}
+
+enum ProgressStatus {
+  not_started
+  in_progress
+  completed
+}
+
+enum CMSContentType {
+  page
+  blog
+  testimonial
+  banner
+  faq
+}
+
+enum CMSContentStatus {
+  draft
+  review
+  published
+}
+
+enum LeadStatus {
+  new
+  contacted
+  qualified
+  converted
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  role          UserRole       @default(student)
+  region        String?
+  profile       Json?
+  xp            Int            @default(0)
+  createdAt     DateTime       @default(now()) @map("created_at")
+  enrollments   Enrollment[]
+  payments      Payment[]
+  progress      Progress[]
+  certificates  Certificate[]
+  lead          Lead?          @relation(fields: [email], references: [email])
+  forumThreads  ForumThread[]
+  forumReplies  ForumReply[]
+  managedTeams  Team[]         @relation("TeamManager")
+  ownedCompany  Company?       @relation("CompanyAdmin")
+  companyId     String?
+  company       Company?       @relation("CompanyEmployees", fields: [companyId], references: [id])
+  teams         Team[]         @relation("TeamMembers")
+
+  @@map("users")
+}
+
+model Course {
+  id           String          @id @default(uuid())
+  title        String
+  slug         String          @unique
+  description  String?
+  regions      String[]
+  status       CourseStatus    @default(draft)
+  metadata     Json?
+  instructorId String?         @map("instructor_id")
+  sections     Section[]
+  pricing      CoursePricing[]
+  enrollments  Enrollment[]
+  certificates Certificate[]
+  forumThreads ForumThread[]
+  companyEnrollments CompanyEnrollment[]
+
+  @@map("courses")
+}
+
+model Section {
+  id        String   @id @default(uuid())
+  courseId  String   @map("course_id")
+  course    Course   @relation(fields: [courseId], references: [id])
+  title     String
+  sortOrder Int      @map("sort_order")
+  lessons   Lesson[]
+
+  @@map("sections")
+}
+
+model Lesson {
+  id              String     @id @default(uuid())
+  sectionId       String     @map("section_id")
+  section         Section    @relation(fields: [sectionId], references: [id])
+  title           String
+  type            LessonType
+  content         Json
+  sortOrder       Int        @map("sort_order")
+  durationMinutes Int?       @map("duration_minutes")
+  progress        Progress[]
+
+  @@map("lessons")
+}
+
+model CoursePricing {
+  id            String  @id @default(uuid())
+  courseId      String  @map("course_id")
+  course        Course  @relation(fields: [courseId], references: [id])
+  region        String
+  currency      String
+  price         Decimal @db.Decimal(10, 2)
+  discountPrice Decimal? @map("discount_price") @db.Decimal(10, 2)
+
+  @@unique([courseId, region])
+  @@map("course_pricing")
+}
+
+model Enrollment {
+  id         String           @id @default(uuid())
+  userId     String           @map("user_id")
+  user       User             @relation(fields: [userId], references: [id])
+  courseId   String           @map("course_id")
+  course     Course           @relation(fields: [courseId], references: [id])
+  status     EnrollmentStatus @default(active)
+  enrolledAt DateTime         @default(now()) @map("enrolled_at")
+  payments   Payment[]
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  userId            String        @map("user_id")
+  user              User          @relation(fields: [userId], references: [id])
+  enrollmentId      String?       @map("enrollment_id")
+  enrollment        Enrollment?   @relation(fields: [enrollmentId], references: [id])
+  gateway           String
+  gatewayPaymentId  String?       @unique @map("gateway_payment_id")
+  gatewayOrderId    String?       @map("gateway_order_id")
+  amount            Decimal       @db.Decimal(10, 2)
+  currency          String
+  status            PaymentStatus @default(pending)
+  gatewayResponse   Json?         @map("gateway_response")
+  createdAt         DateTime      @default(now()) @map("created_at")
+
+  @@map("payments")
+}
+
+model Progress {
+  id            String         @id @default(uuid())
+  userId        String         @map("user_id")
+  user          User           @relation(fields: [userId], references: [id])
+  lessonId      String         @map("lesson_id")
+  lesson        Lesson         @relation(fields: [lessonId], references: [id])
+  status        ProgressStatus @default(not_started)
+  completionPct Decimal        @default(0) @map("completion_pct") @db.Decimal(5, 2)
+  data          Json?
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  @@unique([userId, lessonId])
+  @@map("progress")
+}
+
+model Certificate {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  user              User     @relation(fields: [userId], references: [id])
+  courseId          String   @map("course_id")
+  course            Course   @relation(fields: [courseId], references: [id])
+  certificateUrl    String?  @map("certificate_url")
+  certificateNumber String   @unique @map("certificate_number")
+  verificationHash  String   @map("verification_hash")
+  issuedAt          DateTime @default(now()) @map("issued_at")
+
+  @@map("certificates")
+}
+
+model CMSContent {
+  id          String           @id @default(uuid())
+  type        CMSContentType
+  slug        String
+  region      String?
+  data        Json
+  status      CMSContentStatus @default(draft)
+  version     Int              @default(1)
+  publishedAt DateTime?        @map("published_at")
+
+  @@unique([type, slug, region])
+  @@map("cms_content")
+}
+
+model Lead {
+  id          String     @id @default(uuid())
+  email       String     @unique
+  phone       String?
+  region      String?
+  source      String?
+  utmParams   Json?      @map("utm_params")
+  score       Int        @default(0)
+  status      LeadStatus @default(new)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  user        User?
+
+  @@map("leads")
+}
+
+model ForumThread {
+  id        String       @id @default(uuid())
+  title     String
+  content   String
+  authorId  String       @map("author_id")
+  author    User         @relation(fields: [authorId], references: [id])
+  courseId  String?      @map("course_id")
+  course    Course?      @relation(fields: [courseId], references: [id])
+  replies   ForumReply[]
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  @@map("forum_threads")
+}
+
+model ForumReply {
+  id        String      @id @default(uuid())
+  content   String
+  authorId  String      @map("author_id")
+  author    User        @relation(fields: [authorId], references: [id])
+  threadId  String      @map("thread_id")
+  thread    ForumThread @relation(fields: [threadId], references: [id])
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  @@map("forum_replies")
+}
+model Company {
+  id            String    @id @default(cuid())
+  name          String
+  domain        String?   @unique
+  logoUrl       String?
+  totalSeats    Int       @default(10)
+  usedSeats     Int       @default(0)
+  adminId       String    @unique
+  admin         User      @relation("CompanyAdmin", fields: [adminId], references: [id])
+  teams         Team[]
+  employees     User[]    @relation("CompanyEmployees")
+  companyEnrollments CompanyEnrollment[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Team {
+  id          String    @id @default(cuid())
+  name        String
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  members     User[]    @relation("TeamMembers")
+  managerId   String?
+  manager     User?     @relation("TeamManager", fields: [managerId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model CompanyEnrollment {
+  id        String    @id @default(cuid())
+  companyId String
+  company   Company   @relation(fields: [companyId], references: [id])
+  courseId  String
+  course    Course    @relation(fields: [courseId], references: [id])
+  seats     Int       @default(1)
+  status    String    @default("active") // active, cancelled
+  createdAt DateTime  @default(now())
+}
