@@ -3,9 +3,9 @@ export const getApiUrl = () => {
     // Client-side: Use the public proxy URL
     return "http://72.60.204.70/api";
   }
-  // Server-side (SSR): Use the DIRECT Container IP to bypass Podman DNS issues
-  // Verified IP for genie-learning_api-core_1: 10.89.0.76
-  return "http://10.89.0.76:3001";
+  // Server-side (SSR): Use the STATIC Container IP to bypass Podman DNS issues
+  // Assigned STATIC IP for genie-learning_api-core_1: 10.89.0.100
+  return "http://10.89.0.100:3001";
 };
 
 export const getAiServiceUrl = () => {
@@ -13,9 +13,9 @@ export const getAiServiceUrl = () => {
     // Client-side: Use the public proxy URL
     return "http://72.60.204.70/ai";
   }
-  // Server-side (SSR): Use the DIRECT Container IP
-  // Verified IP for genie-learning_ai-service_1: 10.89.0.77
-  return "http://10.89.0.77:3000";
+  // Server-side (SSR): Use the STATIC Container IP
+  // Assigned STATIC IP for genie-learning_ai-service_1: 10.89.0.101
+  return "http://10.89.0.101:3000";
 };
 
 export const API_BASE_URL = getApiUrl();

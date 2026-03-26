@@ -89,7 +89,8 @@ services:
       - postgres
       - redis
     networks:
-      - genie_network
+      genie_network:
+        ipv4_address: 10.89.0.100
 
   web-frontend:
     image: localhost/genie-web-frontend:latest
@@ -107,9 +108,6 @@ services:
       - "4000:3000"
     depends_on:
       - api-core
-    extra_hosts:
-      - "api-core:10.89.0.1"
-      - "ai-service:10.89.0.1"
     networks:
       - genie_network
 
@@ -135,11 +133,15 @@ services:
       - qdrant
       - postgres
     networks:
-      - genie_network
+      genie_network:
+        ipv4_address: 10.89.0.101
 
 networks:
   genie_network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 10.89.0.0/24
 
 volumes:
   pg-data:
