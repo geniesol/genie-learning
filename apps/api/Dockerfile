@@ -18,5 +18,4 @@ COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 
 WORKDIR /app/apps/api
-EXPOSE 3001
-CMD ["pnpm", "start:prod"]
+CMD ["node", "dist/main.js"]

@@ -20,4 +20,4 @@ COPY --from=builder /app/apps/ai-service/package.json ./apps/ai-service/package.
 
 WORKDIR /app/apps/ai-service
 EXPOSE 3000
-CMD ["pnpm", "start:prod"]
+CMD ["node", "dist/main.js"]
