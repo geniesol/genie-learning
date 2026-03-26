@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Query } from '@nestjs/common';
+import { Controller, Post, Body, Query, Get } from '@nestjs/common';
 import { RagService } from './rag.service';
 import { IngestionService } from './ingestion.service';
 import { FeedbackService } from './feedback.service';
