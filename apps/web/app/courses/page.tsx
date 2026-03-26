@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { CourseList } from "@/components/CourseList";
 import { Zap } from "lucide-react";
 import { getApiUrl } from "@/utils/api";

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { notFound } from "next/navigation";
 import { Clock, Globe, BookOpen, Star, Shield, Zap, Sparkles, ArrowRight } from "lucide-react";
 import { getApiUrl } from "@/utils/api";

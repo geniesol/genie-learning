@@ -10,7 +10,7 @@ import { LabService } from './lab.service';
 import { LocalizationService } from './localization.service';
 import { MarketingService } from './marketing.service';
 
-@Controller('ai')
+@Controller()
 export class AiController {
   constructor(
     private ragService: RagService,
