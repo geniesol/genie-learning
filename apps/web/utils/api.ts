@@ -1,19 +1,19 @@
 export const getApiUrl = () => {
   if (typeof window !== "undefined") {
     // Client-side: Use the public proxy URL
-    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:4001";
+    return process.env.NEXT_PUBLIC_API_URL || "http://72.60.204.70/api";
   }
-  // Server-side (SSR): Use the internal gateway to bypass DNS resolution issues in Podman
-  return "http://10.89.0.1:4001";
+  // Server-side (SSR): Use the internal Podman service DNS
+  return "http://api-core:3001";
 };
 
 export const getAiServiceUrl = () => {
   if (typeof window !== "undefined") {
-    // Client-side: Use the public proxy URL (mapped via /ai prefix in Traefik)
-    return (process.env.NEXT_PUBLIC_API_URL?.replace('/api', '/ai')) || "http://localhost:4002";
+    // Client-side: Use the public proxy URL
+    return "http://72.60.204.70/ai";
   }
-  // Server-side (SSR): Use the internal gateway
-  return "http://10.89.0.1:4002";
+  // Server-side (SSR): Use the internal service DNS
+  return "http://ai-service:3000";
 };
 
 export const API_BASE_URL = getApiUrl();
