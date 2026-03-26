@@ -5,11 +5,18 @@ import { getApiUrl } from "@/utils/api";
 
 async function getCourses() {
   try {
-    const res = await fetch(`${getApiUrl()}/courses`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${getApiUrl()}/courses`, { 
+      next: { revalidate: 3600 },
+      cache: 'no-store'
+    });
     if (!res.ok) return [];
-    return res.json();
+    
+    const text = await res.text();
+    if (!text) return [];
+    
+    return JSON.parse(text);
   } catch (error) {
-    console.warn("Failed to fetch courses, likely during build/prerender:", error);
+    console.warn("Failed to fetch courses:", error);
     return [];
   }
 }

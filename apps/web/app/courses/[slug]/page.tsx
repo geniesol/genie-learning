@@ -8,9 +8,16 @@ import { AITutor } from "@/components/AITutor";
 
 async function getCourse(slug: string) {
   try {
-    const res = await fetch(`${getApiUrl()}/courses/${slug}`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${getApiUrl()}/courses/${slug}`, { 
+      next: { revalidate: 3600 },
+      cache: 'no-store'
+    });
     if (!res.ok) return null;
-    return res.json();
+    
+    const text = await res.text();
+    if (!text) return null;
+    
+    return JSON.parse(text);
   } catch (error) {
     console.error("Failed to fetch course:", error);
     return null;
