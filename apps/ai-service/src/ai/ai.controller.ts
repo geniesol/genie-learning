@@ -25,6 +25,16 @@ export class AiController {
     private marketingService: MarketingService,
   ) {}
 
+  @Get()
+  async healthRoot() {
+    return 'Genie AI Service Operational';
+  }
+
+  @Get('health')
+  async health() {
+    return { status: 'ok', service: 'ai-service' };
+  }
+
   @Post('marketing/abandoned')
   async abandonedCart(@Body() body: { name: string, course: string, price: number }) {
     return this.marketingService.generateAbandonedCartOffer(body.name, body.course, body.price);
