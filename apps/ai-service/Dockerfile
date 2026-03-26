@@ -1,7 +1,8 @@
 FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN npm install -g pnpm@latest
+EXPOSE 3000
 
 FROM base AS builder
 WORKDIR /app
@@ -18,5 +19,5 @@ COPY --from=builder /app/apps/ai-service/node_modules ./apps/ai-service/node_mod
 COPY --from=builder /app/apps/ai-service/package.json ./apps/ai-service/package.json
 
 WORKDIR /app/apps/ai-service
-EXPOSE 3002
+EXPOSE 3000
 CMD ["pnpm", "start:prod"]
