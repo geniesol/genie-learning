@@ -20,4 +20,6 @@ COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
 
 WORKDIR /app/apps/web
 EXPOSE 3000
-CMD ["node", "../../node_modules/next/dist/bin/next", "start"]
+# Disable Corepack to prevent DNS issues during startup discoverability
+ENV COREPACK_ENABLE_STRICT=0
+CMD ["npx", "next", "start"]
