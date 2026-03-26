@@ -1,11 +1,11 @@
 export const getApiUrl = () => {
   if (typeof window !== "undefined") {
     // Client-side: Use the public proxy URL
-    return process.env.NEXT_PUBLIC_API_URL || "http://72.60.204.70/api";
+    return "http://72.60.204.70/api";
   }
-  // Server-side (SSR): Use the host gateway IP and the mapped port (4001)
-  // This bypasses Podman internal DNS issues (EAI_AGAIN)
-  return "http://10.89.0.1:4001";
+  // Server-side (SSR): Use the DIRECT Container IP to bypass Podman DNS issues
+  // Verified IP for genie-learning_api-core_1: 10.89.0.76
+  return "http://10.89.0.76:3001";
 };
 
 export const getAiServiceUrl = () => {
@@ -13,8 +13,9 @@ export const getAiServiceUrl = () => {
     // Client-side: Use the public proxy URL
     return "http://72.60.204.70/ai";
   }
-  // Server-side (SSR): Use the host gateway IP and mapped port (4002)
-  return "http://10.89.0.1:4002";
+  // Server-side (SSR): Use the DIRECT Container IP
+  // Verified IP for genie-learning_ai-service_1: 10.89.0.77
+  return "http://10.89.0.77:3000";
 };
 
 export const API_BASE_URL = getApiUrl();
