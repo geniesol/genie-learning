@@ -148,6 +148,8 @@ services:
       - DATABASE_URL=postgresql://root:password@10.89.0.10:5432/genie_learning?schema=public
       - QDRANT_URL=http://10.89.0.12:6333
       - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-test}
+    volumes:
+      - /etc/resolv.conf:/etc/resolv.conf:ro
     ports:
       - "4002:3000"
     labels:
