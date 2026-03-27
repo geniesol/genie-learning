@@ -9,7 +9,6 @@ import { AITutor } from "@/components/AITutor";
 async function getCourse(slug: string) {
   try {
     const res = await fetch(`${getApiUrl()}/courses/${slug}`, { 
-      next: { revalidate: 3600 },
       cache: 'no-store'
     });
     if (!res.ok) return null;

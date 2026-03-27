@@ -12,14 +12,12 @@ COPY . .
 
 FROM base AS runner
 WORKDIR /app
-COPY --from=builder /app/apps/web/.next ./apps/web/.next
-COPY --from=builder /app/apps/web/public ./apps/web/public
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/web/node_modules ./apps/web/node_modules
-COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
 
-WORKDIR /app/apps/web
+# Copy the standalone server bundle (includes only required node_modules)
+COPY --from=builder /app/apps/web/.next/standalone ./
+# Copy static assets (not included in standalone bundle)
+COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder /app/apps/web/public ./apps/web/public
+
 EXPOSE 3000
-# Disable Corepack to prevent DNS issues during startup discoverability
-ENV COREPACK_ENABLE_STRICT=0
-CMD ["npx", "next", "start"]
+CMD ["node", "apps/web/server.js"]

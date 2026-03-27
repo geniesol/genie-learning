@@ -6,7 +6,6 @@ import { getApiUrl } from "@/utils/api";
 async function getCourses() {
   try {
     const res = await fetch(`${getApiUrl()}/courses`, { 
-      next: { revalidate: 3600 },
       cache: 'no-store'
     });
     if (!res.ok) return [];

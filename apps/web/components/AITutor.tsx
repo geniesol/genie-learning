@@ -38,7 +38,7 @@ export function AITutor({ courseTitle, context }: AITutorProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${getAiServiceUrl()}/ai/tutor`, {
+      const response = await fetch(`${getAiServiceUrl()}/tutor`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
