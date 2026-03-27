@@ -1,6 +1,6 @@
 import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Enrollment } from '@prisma/client';
+import { Enrollment } from '@genie/db';
 
 @Injectable()
 export class EnrollmentsService {
