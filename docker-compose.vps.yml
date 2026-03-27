@@ -28,7 +28,8 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
     networks:
-      - genie_network
+      genie_network:
+        ipv4_address: 10.89.0.10
 
   redis:
     image: docker.io/library/redis:7-alpine
@@ -38,7 +39,8 @@ services:
     volumes:
       - redis-data:/data
     networks:
-      - genie_network
+      genie_network:
+        ipv4_address: 10.89.0.11
 
   qdrant:
     image: docker.io/qdrant/qdrant:latest
@@ -49,7 +51,8 @@ services:
     volumes:
       - qdrant-data:/qdrant/storage
     networks:
-      - genie_network
+      genie_network:
+        ipv4_address: 10.89.0.12
 
   minio:
     image: docker.io/minio/minio
@@ -64,7 +67,8 @@ services:
     volumes:
       - minio-data:/data
     networks:
-      - genie_network
+      genie_network:
+        ipv4_address: 10.89.0.13
 
   api-core:
     image: localhost/genie-api:latest
@@ -73,8 +77,8 @@ services:
       dockerfile: apps/api/Dockerfile
     restart: always
     environment:
-      - DATABASE_URL=postgresql://root:password@postgres:5432/genie_learning?schema=public
-      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://root:password@10.89.0.10:5432/genie_learning?schema=public
+      - REDIS_URL=redis://10.89.0.11:6379
       - JWT_SECRET=supersecret
       - STRIPE_SECRET_KEY=sk_test_123
     ports:
@@ -100,8 +104,8 @@ services:
     restart: always
     environment:
       - NEXT_PUBLIC_API_URL=http://72.60.204.70/api
-      - INTERNAL_API_URL=http://api-core:3001
-      - INTERNAL_AI_URL=http://ai-service:3000
+      - INTERNAL_API_URL=http://10.89.0.100:3001
+      - INTERNAL_AI_URL=http://10.89.0.101:3000
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`72.60.204.70`)"
@@ -120,8 +124,8 @@ services:
       dockerfile: apps/ai-service/Dockerfile
     restart: always
     environment:
-      - DATABASE_URL=postgresql://root:password@postgres:5432/genie_learning?schema=public
-      - QDRANT_URL=http://qdrant:6333
+      - DATABASE_URL=postgresql://root:password@10.89.0.10:5432/genie_learning?schema=public
+      - QDRANT_URL=http://10.89.0.12:6333
       - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-test}
     ports:
       - "4002:3000"
