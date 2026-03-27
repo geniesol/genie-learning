@@ -36,3 +36,21 @@ export const apiRequest = async (path: string, options: RequestInit = {}) => {
 
   return response.json();
 };
+
+export async function getCourses() {
+  try {
+    return await apiRequest("/courses");
+  } catch (error) {
+    console.error("Failed to fetch courses:", error);
+    return null;
+  }
+}
+
+export async function getCourse(slug: string) {
+  try {
+    return await apiRequest(`/courses/${slug}`);
+  } catch (error) {
+    console.error("Failed to fetch course:", error);
+    return null;
+  }
+}

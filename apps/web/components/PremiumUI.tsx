@@ -73,10 +73,19 @@ export function PremiumButton({
   );
 }
 
-export function BadgePill({ children, className }: { children: React.ReactNode, className?: string }) {
+export function BadgePill({ 
+  children, 
+  className, 
+  variant = 'solid' 
+}: { 
+  children: React.ReactNode, 
+  className?: string,
+  variant?: 'solid' | 'outline' 
+}) {
   return (
     <span className={cn(
-      "px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-widest",
+      "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
+      variant === 'solid' ? "bg-accent/10 border border-accent/20 text-accent" : "border border-white/20 text-muted-foreground",
       className
     )}>
       {children}

@@ -1,91 +1,46 @@
 @import "tailwindcss";
 
-@layer theme {
-  :root {
-    /* Premium Slate & Indigo Palette */
-    --background: hsl(222 47% 98%);
-    --foreground: hsl(222 47% 12%);
-    
-    --card: hsl(0 0% 100%);
-    --card-foreground: hsl(222 47% 12%);
-    
-    --popover: hsl(0 0% 100%);
-    --popover-foreground: hsl(222 47% 12%);
-    
-    /* Vibrant Electric Purple/Indigo */
-    --primary: hsl(250 89% 60%);
-    --primary-foreground: hsl(210 40% 98%);
-    
-    --secondary: hsl(210 40% 96.1%);
-    --secondary-foreground: hsl(222.2 47.4% 11.2%);
-    
-    --muted: hsl(210 40% 96.1%);
-    --muted-foreground: hsl(215.4 16.3% 46.9%);
-    
-    /* Luxury Gold Accent */
-    --accent: hsl(45 100% 50%);
-    --accent-foreground: hsl(222.2 47.4% 11.2%);
-    
-    --destructive: hsl(0 84.2% 60.2%);
-    --destructive-foreground: hsl(210 40% 98%);
-    
-    --border: hsl(214.3 31.8% 91.4%);
-    --input: hsl(214.3 31.8% 91.4%);
-    --ring: hsl(250 89% 60%);
-    
-    --radius: 1rem;
-  }
+@theme {
+  /* Genie Orange #FF6F00 */
+  --color-primary: #FF6F00;
+  --color-primary-foreground: #FFFFFF;
+  
+  /* Genie Red #E63946 */
+  --color-accent: #E63946;
+  --color-accent-foreground: #FFFFFF;
 
-  .dark {
-    --background: hsl(222 47% 4%);
-    --foreground: hsl(210 40% 98%);
-    
-    --card: hsl(222 47% 6%);
-    --card-foreground: hsl(210 40% 98%);
-    
-    --popover: hsl(222 47% 6%);
-    --popover-foreground: hsl(210 40% 98%);
-    
-    --primary: hsl(250 89% 65%);
-    --primary-foreground: hsl(222.2 47.4% 11.2%);
-    
-    --secondary: hsl(217.2 32.6% 12.5%);
-    --secondary-foreground: hsl(210 40% 98%);
-    
-    --muted: hsl(217.2 32.6% 17.5%);
-    --muted-foreground: hsl(215 20.2% 65.1%);
-    
-    --accent: hsl(45 100% 50%);
-    --accent-foreground: hsl(210 40% 98%);
-    
-    --destructive: hsl(0 62.8% 30.6%);
-    --destructive-foreground: hsl(210 40% 98%);
-    
-    --border: hsl(217.2 32.6% 17.5%);
-    --input: hsl(217.2 32.6% 17.5%);
-    --ring: hsl(250 89% 65%);
-  }
+  --color-background: #050505;
+  --color-foreground: #FFFFFF;
+
+  --font-sans: var(--font-open-sans), sans-serif;
+  --font-heading: var(--font-poppins), sans-serif;
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  :root {
+    --primary: #FF6F00;
+    --accent: #E63946;
+    --background: #050505;
+    --foreground: #ffffff;
   }
+
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: #050505 !important;
+    color: #ffffff !important;
+    font-family: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif !important;
     -webkit-font-smoothing: antialiased;
   }
-}
 
-@layer utilities {
-  .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)];
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif !important;
+    font-weight: 800;
   }
-  
-  .glass-dark {
-    @apply bg-black/20 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
-  }
+
+  /* Force brand colors on common elements for the mockup */
+  .bg-primary { background-color: #FF6F00 !important; }
+  .text-primary { color: #FF6F00 !important; }
+  .bg-accent { background-color: #E63946 !important; }
+  .text-accent { color: #E63946 !important; }
 
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-br from-primary via-primary to-accent;

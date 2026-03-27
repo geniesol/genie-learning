@@ -14,7 +14,7 @@ export function CourseList({ initialCourses }: CourseListProps) {
   const [activeCategory, setActiveCategory] = useState("All");
 
   const displayCourses = initialCourses.length > 0 ? initialCourses : MOCK_COURSES;
-  const categories = ["All", "AI", "Quantum", "Genomics"];
+  const categories = ["All", "AI", "Quantum", "Genomics", "Cybersecurity", "Web3"];
 
   const filteredCourses = displayCourses.filter((course: any) => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

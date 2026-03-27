@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Poppins, Open_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
   display: 'swap',
 });
 
-const outfit = Outfit({
+const openSans = Open_Sans({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-open-sans",
   display: 'swap',
 });
 
@@ -28,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${outfit.variable} font-sans bg-background text-foreground antialiased`}>
+      <body className={`${poppins.variable} ${openSans.variable} font-sans bg-background text-foreground antialiased`}>
         <div className="hero-gradient min-h-screen selection:bg-primary/30 selection:text-primary">
           <Header />
           <main className="pt-20 animate-reveal">
