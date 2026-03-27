@@ -13,10 +13,7 @@ COPY . .
 
 FROM base AS runner
 WORKDIR /app
-COPY --from=builder /app/apps/ai-service/dist ./apps/ai-service/dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/apps/ai-service/node_modules ./apps/ai-service/node_modules
-COPY --from=builder /app/apps/ai-service/package.json ./apps/ai-service/package.json
+COPY --from=builder /app .
 COPY --from=builder /app/packages/db ./packages/db
 
 WORKDIR /app/apps/ai-service

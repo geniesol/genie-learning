@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CourseCard } from "./CourseCard";
 import { Search, Filter } from "lucide-react";
+import { MOCK_COURSES } from "@/utils/mock-data";
 
 interface CourseListProps {
   initialCourses: any[];
@@ -12,9 +13,10 @@ export function CourseList({ initialCourses }: CourseListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const categories = ["All", "AI", "Design", "Genomics"];
+  const displayCourses = initialCourses.length > 0 ? initialCourses : MOCK_COURSES;
+  const categories = ["All", "AI", "Quantum", "Genomics"];
 
-  const filteredCourses = initialCourses.filter((course) => {
+  const filteredCourses = displayCourses.filter((course: any) => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          course.description?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = activeCategory === "All" || course.metadata?.category === activeCategory;

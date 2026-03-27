@@ -5,6 +5,7 @@ import { getApiUrl } from "@/utils/api";
 import { BadgePill, GlassCard } from "@/components/PremiumUI";
 import { Curriculum } from "@/components/Curriculum";
 import { AITutor } from "@/components/AITutor";
+import { MOCK_COURSES } from "@/utils/mock-data";
 
 async function getCourse(slug: string) {
   try {
@@ -24,7 +25,12 @@ async function getCourse(slug: string) {
 }
 
 export default async function CourseDetailPage({ params }: { params: { slug: string } }) {
-  const course = await getCourse(params.slug);
+  let course = await getCourse(params.slug);
+
+  if (!course) {
+    // Fallback to mock data if API fails
+    course = MOCK_COURSES.find(c => c.slug === params.slug) || null;
+  }
 
   if (!course) {
     notFound();

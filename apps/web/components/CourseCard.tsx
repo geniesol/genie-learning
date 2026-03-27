@@ -8,8 +8,11 @@ interface CourseCardProps {
     title: string;
     slug: string;
     description: string | null;
-    regions: string[];
+    regions?: string[];
     metadata?: any;
+    category?: string;
+    duration?: string;
+    level?: string;
   };
 }
 
@@ -27,7 +30,7 @@ export function CourseCard({ course }: CourseCardProps) {
         
         {/* Region Badges */}
         <div className="absolute top-5 left-5 flex flex-wrap gap-2">
-          {course.regions.map((region) => (
+          {(course.regions || ["Global"]).map((region) => (
             <BadgePill key={region} className="bg-black/40 backdrop-blur-md border border-white/10 text-[9px]">
               {region}
             </BadgePill>
@@ -47,7 +50,7 @@ export function CourseCard({ course }: CourseCardProps) {
       <div className="p-8 flex flex-col flex-grow">
         <div className="mb-4">
            <BadgePill className="bg-primary/10 text-primary border-primary/20 px-2 py-0 text-[10px] mb-3">
-             {course.metadata?.category || "Professional Path"}
+             {course.category || course.metadata?.category || "Professional Path"}
            </BadgePill>
            <h3 className="text-2xl font-outfit font-black tracking-tight leading-tight group-hover:text-gradient transition-all duration-500">
              {course.title}
@@ -61,10 +64,10 @@ export function CourseCard({ course }: CourseCardProps) {
         <div className="flex items-center justify-between mt-auto pt-8 border-t border-white/5">
           <div className="flex items-center gap-5 text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">
             <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" /> {course.metadata?.duration || "Self-Paced"}
+              <Clock className="w-3.5 h-3.5" /> {course.duration || course.metadata?.duration || "Self-Paced"}
             </span>
             <span className="flex items-center gap-1.5">
-              <Globe className="w-3.5 h-3.5" /> {course.metadata?.level || "Beginner"}
+              <Globe className="w-3.5 h-3.5" /> {course.level || course.metadata?.level || "Beginner"}
             </span>
           </div>
           
