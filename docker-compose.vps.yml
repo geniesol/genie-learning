@@ -103,7 +103,7 @@ services:
       dockerfile: apps/web/Dockerfile
     restart: always
     environment:
-      - NEXT_PUBLIC_API_URL=http://dev.genielearning.in/api
+      - NEXT_PUBLIC_API_URL=https://dev.genielearning.in/api
       - INTERNAL_API_URL=http://10.89.0.100:3001
       - INTERNAL_AI_URL=http://10.89.0.101:3000
     labels:
