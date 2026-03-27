@@ -4,15 +4,31 @@ import { useState } from "react";
 import { Zap, Mail, Lock, Github, Globe, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { GlassCard, PremiumButton, BadgePill } from "@/components/PremiumUI";
+import { apiRequest } from "@/utils/api";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: Implement login logic
-    setTimeout(() => setIsLoading(false), 2000);
+    setMessage(null);
+    try {
+      const data = await apiRequest("/auth/login", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+      if (data.access_token) {
+        localStorage.setItem("token", data.access_token);
+        setMessage({ type: 'success', text: "Access granted! Syncing..." });
+        setTimeout(() => window.location.href = "/dashboard", 1000);
+      }
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message || "Authentication failed" });
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -35,6 +51,11 @@ export default function LoginPage() {
         </div>
 
         <GlassCard className="p-10 border-white/5 shadow-[0_32px_128px_-32px_rgba(0,0,0,0.5)] animate-reveal" style={{ animationDelay: '0.1s' }}>
+          {message && (
+            <div className={`mb-6 p-4 rounded-2xl text-xs font-black uppercase tracking-widest ${message.type === 'success' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+              {message.text}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Identity Sync</label>
@@ -44,6 +65,8 @@ export default function LoginPage() {
                   type="email" 
                   placeholder="name@example.com"
                   className="w-full bg-white/[0.03] border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-muted-foreground/50"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                 />
               </div>
@@ -62,6 +85,8 @@ export default function LoginPage() {
                   type="password" 
                   placeholder="••••••••"
                   className="w-full bg-white/[0.03] border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-sm focus:ring-4 focus:ring-primary/10 outline-none transition-all placeholder:text-muted-foreground/50"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
                 />
               </div>

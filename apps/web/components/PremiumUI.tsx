@@ -61,7 +61,7 @@ export function PremiumButton({
   return (
     <button
       className={cn(
-        'rounded-full transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none',
+        'rounded-full transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:pointer-events-none min-h-[3.5rem]',
         variants[variant],
         sizes[size],
         className
